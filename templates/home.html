@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="layout">
+  <section>
+    <h1>{{ heading }}</h1>
+    <input type="text" id="search" placeholder="Search posts">
+
+    {% for post in posts %}
+      <article class="card post-card">
+        <p class="meta">{{ post.author.username }} · {{ post.created_at.strftime('%d %b %Y') }}</p>
+        <h2><a href="{{ url_for('view_post', post_id=post.id) }}">{{ post.title }}</a></h2>
+        <p>{{ post.body[:150] }}{% if post.body|length > 150 %}...{% endif %}</p>
+        <span class="tag">{{ post.category }}</span>
+        <span class="meta"> · {{ post.comments|length }} comments</span>
+      </article>
+    {% else %}
+      <p>No posts yet.</p>
+    {% endfor %}
+  </section>
+
+  {% if categories %}
+  <aside class="card">
+    <h3>Categories</h3>
+    <p>
+      <a class="tag" href="{{ url_for('home') }}">all</a>
+      {% for c in categories %}
+        <a class="tag" href="{{ url_for('home', category=c) }}">{{ c }}</a>
+      {% endfor %}
+    </p>
+  </aside>
+  {% endif %}
+</div>
+{% endblock %}
